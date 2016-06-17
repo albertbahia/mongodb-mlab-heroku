@@ -5,13 +5,21 @@ var mongoose = require('mongoose');
 
 /*Mongoose Connect*/
 var db = 'mongodb://localhost/mongoHeadlines';
-mongoose.connect(db, function(err){
-  if(err){
+if (process.env.MONGOLAB_URI) {
+  if (err) {
     console.log(err);
   } else {
-    console.log('mongoose connection is sucessful');
+    mongoose.connect(process.env.MONGOLAB_URI);
   }
-});
+} else {
+  mongoose.connect(db, function(err){
+    if(err){
+      console.log(err);
+    } else {
+      console.log('mongoose connection is sucessful');
+    }
+  });
+}
 
 app.use(express.static(__dirname + '/public'));
 var port = process.env.PORT || 5000;
